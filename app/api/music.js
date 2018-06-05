@@ -3,6 +3,7 @@
 const speech = require('@google-cloud/speech');
 const rp = require('request-promise');
 const fs = require('fs');
+const ytdl = require('ytdl-core');
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
 function speechToText(filePath) {
@@ -51,6 +52,8 @@ function searchMusic(query) {
 
 function playMusic(youtubeUrl) {
   console.log("youtubeUrl:", youtubeUrl);
+  ytdl(youtubeUrl)
+    .pipe(fs.createWriteStream('test.flv'));
 }
 
 module.exports = { speechToText };
