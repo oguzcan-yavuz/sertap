@@ -16,6 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(express.urlencoded({ extended:true }));
+app.use(express.json());
 app.use(router);
 app.listen(PORT, () => {
   console.log("Server is listening on port " + PORT);
