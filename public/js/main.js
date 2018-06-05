@@ -1,5 +1,5 @@
-function __log(e, data) {
-  log.innerHTML += "\n" + e + " " + (data || '');
+function __log(data) {
+  console.log(data);
 }
 
 var audio_context;
@@ -19,14 +19,11 @@ function startUserMedia(stream) {
 
 function startRecording(button) {
   recorder && recorder.record();
-  button.disabled = true;
-  button.nextElementSibling.disabled = false;
   __log('Recording...');
 }
 
 function stopRecording(button) {
   recorder && recorder.stop();
-  button.disabled = true;
   button.previousElementSibling.disabled = false;
   __log('Stopped recording.');
 
