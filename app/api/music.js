@@ -14,7 +14,7 @@ function speechToText(filePath) {
     content: audioBytes
   };
   const config = {
-    encoding: 'FLAC',
+    encoding: 'LINEAR16',
     languageCode: 'tr-TR'
   };
   const request = {
@@ -52,8 +52,8 @@ function searchMusic(query) {
 
 function playMusic(youtubeUrl) {
   console.log("youtubeUrl:", youtubeUrl);
-  ytdl(youtubeUrl)
-    .pipe(fs.createWriteStream('test.flv'));
+  ytdl(youtubeUrl, { filter: 'audioonly'})
+    .pipe(fs.createWriteStream('test'));
 }
 
 module.exports = { speechToText };
