@@ -1,12 +1,10 @@
 extends layout.pug
 
 block content
-  h1 Recorder.js simple WAV export example
-  p Make sure you are using a recent version of Google Chrome.
+  h1 Sertap On Air
+  p Dinlemek ıstediğin müziği söyle.
   p Also before you enable microphone input either plug in headphones or turn the volume down if you want to avoid ear splitting feedback!
   button#record(type='button' name='record' onmousedown='startRecording(this);' onmouseup='stopRecording(this);') Listen
-  h2 Recordings
-  ul#recordingslist
   h2 Music
   ul#musicsList
 

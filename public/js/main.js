@@ -28,27 +28,28 @@ function stopRecording(button) {
   __log('Stopped recording.');
 
   // create WAV download link using audio data blob
-  createDownloadLink();
+  createBlobLink();
 
   recorder.clear();
 }
 
-function createDownloadLink() {
-  recorder && recorder.exportWAV(function(blob) {
-    console.log(blob);
-    var url = URL.createObjectURL(blob);
-    var li = document.createElement('li');
-    var au = document.createElement('audio');
-    var hf = document.createElement('a');
+function addListRecording(){
+  var url = URL.createObjectURL(blob);
+  var li = document.createElement('li');
+  var au = document.createElement('audio');
+  var hf = document.createElement('a');
 
-    au.controls = true;
-    au.src = url;
-    hf.href = url;
-    hf.download = new Date().toISOString() + '.wav';
-    hf.innerHTML = hf.download;
-    li.appendChild(au);
-    li.appendChild(hf);
-    recordingslist.appendChild(li);
+  au.controls = true;
+  au.src = url;
+  hf.href = url;
+  hf.download = new Date().toISOString() + '.wav';
+  hf.innerHTML = hf.download;
+  li.appendChild(au);
+  li.appendChild(hf);
+  recordingslist.appendChild(li);
+}
+function createBlobLink() {
+  recorder && recorder.exportWAV(function(blob) {
     sendFile('/',{ soundBlob: blob });
   });
 }
