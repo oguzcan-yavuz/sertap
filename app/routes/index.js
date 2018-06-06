@@ -1,18 +1,16 @@
 'use strict';
 
+const multer = require('multer');
+const path = require('path');
+const appDir = path.dirname(require.main.filename);
+const upload = multer({ dest: path.join(appDir, 'public', 'uploads') });
 const router = require("express").Router();
-const speechToText = require('../api/music.js').speechToText;
+const playMusic = require('../api/music.js');
 
-router.get('/', async (req, res) => {
-  // speechToText('/home/yvz/yvz-dev/sertap/data/2018-06-05T22_47_47.035Z.wav');
+router.get('/', (req, res) => {
   res.render('index');
 });
 
-router.post('/', (req, res) => {
-  let path = req.body;
-  console.log(path);
-  // speechToText('/home/yvz/yvz-dev/sertap/data/2018-06-05T22_47_47.035Z.wav');
-  // speechToText(path);
-});
+router.post('/', upload.single('upl'), playMusic);
 
 module.exports = router;
