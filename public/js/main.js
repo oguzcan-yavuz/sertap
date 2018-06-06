@@ -49,9 +49,25 @@ function createDownloadLink() {
     li.appendChild(au);
     li.appendChild(hf);
     recordingslist.appendChild(li);
-    // hf.click();
     sendFile('/',{ soundBlob: blob });
   });
+}
+
+function addListMusic(data) {
+  var url = 'https://www.youtube.com/watch?v=' + data['videoInfo']['id']['videoId'];
+  var li = document.createElement('li');
+  var au = document.createElement('audio');
+  var hf = document.createElement('a');
+
+  au.controls = true;
+  au.autoplay = true;
+  au.src = data['streamUrl'];
+  hf.href = url;
+  hf.download = data['videoInfo']['snippet']['title'];
+  hf.innerHTML = hf.download;
+  li.appendChild(au);
+  li.appendChild(hf);
+  musicsList.appendChild(li);
 }
 
 /**
@@ -63,9 +79,17 @@ function createDownloadLink() {
 function sendFile(url, data) {
   let form = new FormData();
   form.append('soundBlob', data.soundBlob);
-  let request = new XMLHttpRequest();
-  request.open('POST', '/');
-  request.send(form);
+  fetch(url, {
+    method: 'POST',
+    body: form
+  })
+  .then(response => response.json())
+  .then(res => {
+    // todo: json is in here
+    console.log('Success:', res);
+    addListMusic(res);
+  })
+  .catch(error => console.error('Error:', error));
 }
 
 window.onload = function init() {
