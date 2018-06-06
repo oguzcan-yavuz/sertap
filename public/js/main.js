@@ -35,6 +35,7 @@ function stopRecording(button) {
 
 function createDownloadLink() {
   recorder && recorder.exportWAV(function(blob) {
+    console.log(blob);
     var url = URL.createObjectURL(blob);
     var li = document.createElement('li');
     var au = document.createElement('audio');
@@ -48,7 +49,8 @@ function createDownloadLink() {
     li.appendChild(au);
     li.appendChild(hf);
     recordingslist.appendChild(li);
-    sendFile('/',{soundFile: url});
+    // hf.click();
+    sendFile('/',{ soundBlob: blob });
   });
 }
 
@@ -59,12 +61,15 @@ function createDownloadLink() {
 */
 
 function sendFile(url, data) {
+  let form = new FormData();
+  form.append('soundBlob', data.soundBlob);
   fetch(url, {
     method: 'POST', // or 'PUT'
-    body: JSON.stringify(data), // data can be `string` or {object}!
-    headers:{
-      'Content-Type': 'application/json'
-    }
+    // body: JSON.stringify(data), // data can be `string` or {object}!
+    body: form,
+    // headers:{
+    //   'Content-Type': 'multipart/form-data'
+    // }
   }).then(res => res.json())
   .catch(error => console.error('Error:', error))
   .then(response => console.log('Success:', response));
