@@ -2,10 +2,7 @@
 
 const speech = require('@google-cloud/speech');
 const rp = require('request-promise');
-const fs = require('fs');
 const ytdl = require('ytdl-core');
-const path = require('path');
-const appDir = path.dirname(require.main.filename);
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
 function speechToText(buffer) {
@@ -48,24 +45,29 @@ function searchMusic(query) {
     json: true
   };
   return rp(options)
-    .then(res => "https://www.youtube.com/watch?v=" + res.items[0].id.videoId);
+    .then(res => res.items[0].id.videoId);
 }
 
-function convertVidToAudio(youtubeUrl) {
-  console.log("youtubeUrl:", youtubeUrl);
-  return ytdl(youtubeUrl, { filter: 'audioonly'});
+function convertVidToAudio(videoId) {
+  return ytdl("https://www.youtube.com/watch?v=" + videoId, { filter: 'audioonly'});
 }
 
 async function getMusic(req, res) {
   let buffer = req.file.buffer;
   let query = await speechToText(buffer);
-  let youtubeUrl = await searchMusic(query);
-  let audioOnly = convertVidToAudio(youtubeUrl);
-  audioOnly.pipe(res);
+  let videoId = await searchMusic(query);
+  res.redirect('/play/' + videoId);
+}
+
+async function openPlayer(req, res) {
+  let videoId = req.params.videoId;
+  res.render('player', { videoId: videoId });
 }
 
 async function streamMusic(req, res) {
-
+  let videoId = req.params.videoId;
+  let audioOnly = convertVidToAudio(videoId);
+  audioOnly.pipe(res);
 }
 
-module.exports = { getMusic, streamMusic };
+module.exports = { getMusic, openPlayer, streamMusic };
