@@ -4,6 +4,8 @@ const speech = require('@google-cloud/speech');
 const rp = require('request-promise');
 const fs = require('fs');
 const ytdl = require('ytdl-core');
+const path = require('path');
+const appDir = path.dirname(require.main.filename);
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
 function speechToText(filePath) {
@@ -21,7 +23,7 @@ function speechToText(filePath) {
     audio: audio,
     config: config
   };
-  client
+  return client
     .recognize(request)
     .then(data => {
       const response = data[0];
@@ -29,7 +31,7 @@ function speechToText(filePath) {
         .map(result => result.alternatives[0].transcript)
         .join('\n');
       console.log(`Transcription: ${transcription}`);
-      searchMusic(transcription);
+      return transcription;
     })
     .catch(err => console.error('ERROR:', err));
 }
@@ -46,14 +48,21 @@ function searchMusic(query) {
     },
     json: true
   };
-  rp(options)
-    .then(res => playMusic("https://www.youtube.com/watch?v=" + res.items[0].id.videoId));
+  return rp(options)
+    .then(res => "https://www.youtube.com/watch?v=" + res.items[0].id.videoId);
 }
 
-function playMusic(youtubeUrl) {
+function streamMusic(youtubeUrl) {
   console.log("youtubeUrl:", youtubeUrl);
   ytdl(youtubeUrl, { filter: 'audioonly'})
     .pipe(fs.createWriteStream('test'));
 }
 
-module.exports = { speechToText };
+module.exports = async (req, res) => {
+  console.log('body:', req.body);
+  console.log('file:', req.file);
+  let query = await speechToText(path.join(appDir, 'data', '2018-06-05T22_47_47.035Z.wav'));
+  let youtubeUrl = await searchMusic(query);
+  streamMusic(youtubeUrl);
+  res.render('index');
+};
