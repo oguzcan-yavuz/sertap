@@ -53,15 +53,11 @@ function convertVidToAudio(videoId) {
 }
 
 async function getMusic(req, res) {
+  let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   let buffer = req.file.buffer;
   let query = await speechToText(buffer);
   let videoId = await searchMusic(query);
-  res.redirect('/play/' + videoId);
-}
-
-async function openPlayer(req, res) {
-  let videoId = req.params.videoId;
-  res.render('player', { videoId: videoId });
+  res.json({ streamUrl: fullUrl + "stream/" + videoId });
 }
 
 async function streamMusic(req, res) {
@@ -70,4 +66,4 @@ async function streamMusic(req, res) {
   audioOnly.pipe(res);
 }
 
-module.exports = { getMusic, openPlayer, streamMusic };
+module.exports = { getMusic, streamMusic };
