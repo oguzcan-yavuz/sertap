@@ -12,8 +12,6 @@ router.get('/', (req, res) => {
 
 router.post('/', upload.single('soundBlob'), music.getMusic);
 
-router.get('/play/:videoId', music.openPlayer);
-
 router.get('/stream/:videoId', music.streamMusic);
 
 module.exports = router;
