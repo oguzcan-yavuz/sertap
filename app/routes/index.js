@@ -4,15 +4,16 @@ const multer = require('multer');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const router = require("express").Router();
-const getMusic = require('../api/music.js').getMusic;
-const streamMusic = require('../api/music.js').streamMusic;
+const music = require('../api/music.js');
 
 router.get('/', (req, res) => {
   res.render('index');
 });
 
-router.post('/', upload.single('soundBlob'), getMusic);
+router.post('/', upload.single('soundBlob'), music.getMusic);
 
-router.get('/play', streamMusic);
+router.get('/play/:videoId', music.openPlayer);
+
+router.get('/stream/:videoId', music.streamMusic);
 
 module.exports = router;
