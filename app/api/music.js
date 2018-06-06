@@ -8,10 +8,9 @@ const path = require('path');
 const appDir = path.dirname(require.main.filename);
 const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 
-function speechToText(filePath) {
+function speechToText(buffer) {
   const client = new speech.SpeechClient();
-  const file = fs.readFileSync(filePath);
-  const audioBytes = file.toString('base64');
+  const audioBytes = buffer.toString('base64');
   const audio = {
     content: audioBytes
   };
@@ -52,17 +51,21 @@ function searchMusic(query) {
     .then(res => "https://www.youtube.com/watch?v=" + res.items[0].id.videoId);
 }
 
-function streamMusic(youtubeUrl) {
+function convertVidToAudio(youtubeUrl) {
   console.log("youtubeUrl:", youtubeUrl);
-  ytdl(youtubeUrl, { filter: 'audioonly'})
-    .pipe(fs.createWriteStream('test'));
+  return ytdl(youtubeUrl, { filter: 'audioonly'});
 }
 
-module.exports = async (req, res) => {
-  console.log('body:', req.body);
-  console.log('file:', req.file);
-  let query = await speechToText(path.join(appDir, 'data', '2018-06-05T22_47_47.035Z.wav'));
+async function getMusic(req, res) {
+  let buffer = req.file.buffer;
+  let query = await speechToText(buffer);
   let youtubeUrl = await searchMusic(query);
-  streamMusic(youtubeUrl);
-  res.render('index');
-};
+  let audioOnly = convertVidToAudio(youtubeUrl);
+  audioOnly.pipe(res);
+}
+
+async function streamMusic(req, res) {
+
+}
+
+module.exports = { getMusic, streamMusic };

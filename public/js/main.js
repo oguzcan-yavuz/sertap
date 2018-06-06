@@ -64,15 +64,19 @@ function sendFile(url, data) {
   let form = new FormData();
   form.append('soundBlob', data.soundBlob);
   fetch(url, {
-    method: 'POST', // or 'PUT'
-    // body: JSON.stringify(data), // data can be `string` or {object}!
+    method: 'POST',
+    redirect: 'follow',
     body: form,
-    // headers:{
-    //   'Content-Type': 'multipart/form-data'
-    // }
-  }).then(res => res.json())
-  .catch(error => console.error('Error:', error))
-  .then(response => console.log('Success:', response));
+  })
+    .then(response => {
+      console.log(response);
+      let reader = response.body.getReader();
+      reader.read()
+        .then(result => console.log("result:", result));
+    });
+    // .then(res => res.json())
+  // .then(response => console.log('Success:', response))
+  // .catch(error => console.error('Error:', error))
 }
 
 window.onload = function init() {
