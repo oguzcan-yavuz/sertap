@@ -45,7 +45,8 @@ function searchMusic(query) {
     json: true
   };
   return rp(options)
-    .then(res => res.items[0].id.videoId);
+    .then(res => res.items[0]);
+
 }
 
 function convertVidToAudio(videoId) {
@@ -56,8 +57,9 @@ async function getMusic(req, res) {
   let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
   let buffer = req.file.buffer;
   let query = await speechToText(buffer);
-  let videoId = await searchMusic(query);
-  res.json({ streamUrl: fullUrl + "stream/" + videoId });
+  let videoInfo = await searchMusic(query);
+  let videoId = videoInfo.id.videoId;
+  res.json({ videoInfo: videoInfo, streamUrl: fullUrl + "stream/" + videoId });
 }
 
 async function streamMusic(req, res) {
