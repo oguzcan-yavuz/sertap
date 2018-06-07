@@ -7,3 +7,4 @@ services:
       - .:/sertap
     ports:
       - 3000:3000
+        # todo: services muhabbetine ekledigin icin ayriyetten imaji olustururen _sertap diye tekrar ekliyor.
