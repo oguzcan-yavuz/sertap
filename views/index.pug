@@ -1,12 +1,42 @@
 extends layout.pug
 
 block content
-  h1 Sertap On Air
-  p Dinlemek ıstediğin müziği söyle.
-  p Also before you enable microphone input either plug in headphones or turn the volume down if you want to avoid ear splitting feedback!
-  button#record(type='button' name='record' onmousedown='startRecording(this);' onmouseup='stopRecording(this);') Listen
-  h2 Music
-  ul#musicsList
+  h2 Speech to Music
+  .row
+      #amplitude-player.large-12.medium-12.small-11.large-centered.medium-centered.small-centered.columns
+        .row
+          #amplitude-left.large-6.medium-6.small-12.columns
+            img(amplitude-song-info='cover_art_url', amplitude-main-song-info='true')
+            #player-left-bottom
+              #time-container
+                span.current-time
+                  span.amplitude-current-minutes(amplitude-main-current-minutes='true')
+                  | :
+                  span.amplitude-current-seconds(amplitude-main-current-seconds='true')
+                input.amplitude-song-slider(type='range', amplitude-main-song-slider='true', step='.1')
+                span.duration
+                  span.amplitude-duration-minutes(amplitude-main-duration-minutes='true')
+                  | :
+                  span.amplitude-duration-seconds(amplitude-main-duration-seconds='true')
+              #control-container
+                #repeat-container
+                  #repeat.amplitude-repeat
+                #central-control-container
+                  #central-controls
+                    #previous.amplitude-prev
+                    #play-pause.amplitude-play-pause(amplitude-main-play-pause='true')
+                    #next.amplitude-next
+                #shuffle-container
+                  #shuffle.amplitude-shuffle.amplitude-shuffle-off
+              #meta-container
+                span.song-name(amplitude-song-info='name', amplitude-main-song-info='true')
+                .song-artist-album
+                  span(amplitude-song-info='artist', amplitude-main-song-info='true')
+                  span(amplitude-song-info='album', amplitude-main-song-info='true')
+          #amplitude-right.large-6.medium-6.small-12.columns
+
+      .large-1.medium-1.small-1.large-centered.medium-centered.small-centered.columns
+      button.record(type='button', name='record', onmousedown='startRecording(this);', onmouseup='stopRecording(this)') Sesli Arama Yapmak İçin Basılı Tutun
 
 block scripts
   script(src='/static/js/recorder.js')

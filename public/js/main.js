@@ -4,6 +4,7 @@ function __log(data) {
 
 var audio_context;
 var recorder;
+var jsonMusic= {'songs':[]}
 
 function startUserMedia(stream) {
   var input = audio_context.createMediaStreamSource(stream);
@@ -53,6 +54,7 @@ function createBlobLink() {
     sendFile('/',{ soundBlob: blob });
   });
 }
+/**
 
 function addListMusic(data) {
   var url = 'https://www.youtube.com/watch?v=' + data['videoInfo']['id']['videoId'];
@@ -69,6 +71,47 @@ function addListMusic(data) {
   li.appendChild(au);
   li.appendChild(hf);
   musicsList.appendChild(li);
+}
+*/
+
+function addListMusic(channelTitle, title, videoID){
+  var list = document.getElementById('amplitude-right');
+  var div = document.createElement('div');
+  var count = jsonMusic['songs'].length;
+  div.innerHTML = '<div class="song amplitude-song-container amplitude-play-pause" amplitude-song-index="'+count+'">\
+    <div class="song-now-playing-icon-container">\
+      <div class="play-button-container">\
+      </div>\
+      <img class="now-playing" src="/static/images/now-playing.svg"/>\
+    </div>\
+    <div class="song-meta-data">\
+      <span class="song-title">'+ channelTitle +'</span>\
+      <span class="song-artist">'+ title +'</span>\
+    </div>\
+    <a href="https://www.youtube.com/watch?v=' + videoID +'" class="bandcamp-link" target="_blank">\
+      <img class="bandcamp-grey" src="/static/images/bandcamp-grey.svg"/>\
+      <img class="bandcamp-white" src="/static/images/bandcamp-white.svg"/>\
+    </a>\
+    <span class="song-duration"></span>\
+  </div>';
+  list.appendChild(div);
+}
+
+function addPlayer(title, channelTitle, streamUrl, thumb){
+
+  jsonMusic['songs'].push({
+    "name": title,
+    "artist": "",
+    "album": channelTitle,
+    "url": streamUrl,
+    "cover_art_url": thumb
+  });
+
+  amplitudeList(jsonMusic);
+}
+
+function amplitudeList(data){
+  Amplitude.init(data);
 }
 
 /**
@@ -88,7 +131,13 @@ function sendFile(url, data) {
   .then(res => {
     // todo: json is in here
     console.log('Success:', res);
-    addListMusic(res);
+    let channelTitle = res['videoInfo']['snippet']['channelTitle'];
+    let title = res['videoInfo']['snippet']['title'];
+    let videoID = res['videoInfo']['id']['videoId'];
+    let thumb = res['videoInfo']['snippet']['thumbnails']['high']['url'];
+    let streamUrl = res['streamUrl'];
+    addListMusic(channelTitle, title, videoID);
+    addPlayer(title, channelTitle, streamUrl, thumb);
   })
   .catch(error => console.error('Error:', error));
 }

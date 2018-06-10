@@ -1,7 +1,22 @@
 doctype html
-head
-  meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
-  title Sertap on Air
+html
+  head
+    title Sertap - Speech to Music
+    // Include Resource Stylesheets
+    link(rel='stylesheet', type='text/css', href='/static/css/foundation.min.css')
+    //
+      Include Resource Javascript
+      NOTE: These are for handling things outside of the scope of AmplitudeJS
+    script(type='text/javascript', src='/static/js/jquery.js')
+    script(type='text/javascript', src='/static/js/foundation.min.js')
+    // Include Amplitude JS
+    script(type='text/javascript', src='/static/js/amplitude.js')
+    //
+      Include UX functions JS
+      NOTE: These are for handling things outside of the scope of AmplitudeJS
+    script(type='text/javascript', src='/static/js/functions.js')
+    // Include Style Sheet
+    link(rel='stylesheet', type='text/css', href='/static/css/styles.css')
 body
   block content
   block scripts
