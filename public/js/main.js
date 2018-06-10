@@ -4,7 +4,10 @@ function __log(data) {
 
 var audio_context;
 var recorder;
+<<<<<<< HEAD
 var jsonMusic= {'songs':[]}
+=======
+>>>>>>> 82c793bc0476afcd0ffe7804f9439623658d8e77
 
 function startUserMedia(stream) {
   var input = audio_context.createMediaStreamSource(stream);
