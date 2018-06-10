@@ -10,11 +10,7 @@
   },
   "repository": {
     "type": "git",
-<<<<<<< HEAD
-    "url": "git+ssh://git@gitlab.com/sertap/sertap.git"
-=======
     "url": "git+ssh://git@github.com:yavuzovski/sertap.git"
->>>>>>> 82c793bc0476afcd0ffe7804f9439623658d8e77
   },
   "keywords": [
     "smart",
@@ -44,11 +40,8 @@
     "request-promise": "^4.2.2",
     "serve-favicon": "^2.5.0",
     "ytdl-core": "^0.20.4"
-<<<<<<< HEAD
-=======
   },
   "engines": {
     "node": "10.4.0"
->>>>>>> 82c793bc0476afcd0ffe7804f9439623658d8e77
   }
 }
